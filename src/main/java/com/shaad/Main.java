@@ -20,20 +20,18 @@ public class Main {
         tempTable[0][3] = "=A1/A2*A1*A3";
         tempTable[0][4] = "5";
         tempTable[0][5] = "\'555";
-        tempTable[0][6] = "=555+a1";
+        tempTable[0][6] = "=555+a1*b2+a3/A10";
         tempTable[0][7] = "\'aaa";
         tempTable[0][8] = "=A8";
         tempTable[0][9] = "=B1+B2";
 
-        System.out.println(new Cell(tempTable[0][3]).getComputedContent());
-/*
         int i = 0;
         for (String str : tempTable[0]) {
             if (null != str) {
                 System.out.println(new Cell(str).getComputedContent() + " " + i);
                 i++;
             }
-        }*/
+        }
         //System.out.println(new Cell(tempTable[0][8]).getComputedContent());
 /*        System.out.println(new Cell(tempTable[0][6]).getComputedContent());
         System.out.println(new Cell(tempTable[0][7]).getComputedContent());*/

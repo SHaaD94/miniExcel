@@ -12,6 +12,7 @@ public class Term {
 
     public Term(String termContent) {
         content = termContent;
+        //todo: check for circular reference
         //todo: get rid of 'string types' of content
         if (content.matches("[a-zA-Z][1-9][0-9]*")) {
             this.type = "reference";

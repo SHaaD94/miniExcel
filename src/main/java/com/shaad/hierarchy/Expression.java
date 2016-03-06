@@ -14,45 +14,39 @@ public class Expression {
         this("");
     }
 
-/*
     public Expression(String expressionString) {
         textContent = expressionString;
-        Operation operation = findFirstOperation();
-        if (null != operation) {
-            Term term1 = new Term(textContent.substring(0, textContent.indexOf(operation.toString())));
-            Term term2 = new Term(textContent.substring(textContent.indexOf(operation.toString()) + 1));
-
-            result = executeOperation(term1, term2, operation);
-        } else {
-            result = new Term(textContent).getValue();
-        }
+        result = compute();
     }
-*/
 
-    public Expression(String expressionString) {
-        textContent = expressionString;
-        Operation operation = findFirstOperation(textContent);
+    //todo: try to refactor this method;
+    private String compute() {
+        String result = "";
+        String expression = textContent;
+        Operation operation = findFirstOperation(expression);
         boolean firstOperation = true;
-        result = "";
         if (null != operation) {
             while (null != operation) {
-                int operationSymbolIndex = textContent.indexOf(operation.toString());
-                Operation nextOperation = findFirstOperation(textContent.substring(operationSymbolIndex + 1));
-                int nextOperationIndex = (null == nextOperation) ? textContent.length() : textContent.indexOf(nextOperation.toString());
+                int currentOperationIndex = expression.indexOf(operation.toString());
+                Operation nextOperation = findFirstOperation(expression.substring(currentOperationIndex + 1));
+                int nextOperationIndex = (null == nextOperation) ? expression.length() :
+                        expression.indexOf(nextOperation.toString(), currentOperationIndex + 1);
                 if (firstOperation) {
-                    Term term1 = new Term(textContent.substring(0, operationSymbolIndex));
-                    Term term2 = new Term(textContent.substring(operationSymbolIndex + 1, nextOperationIndex));
+                    Term term1 = new Term(expression.substring(0, currentOperationIndex));
+                    Term term2 = new Term(expression.substring(currentOperationIndex + 1, nextOperationIndex));
                     result = executeOperation(term1, term2, operation);
                     firstOperation = false;
                 } else {
-                    result = executeOperation(new Term(result), new Term(textContent.substring(operationSymbolIndex + 1,
+                    result = executeOperation(new Term(result), new Term(expression.substring(currentOperationIndex + 1,
                             nextOperationIndex)), operation);
                 }
+                expression = expression.replaceFirst("\\" + operation.toString(), "~");
                 operation = nextOperation;
             }
         } else {
-            result = new Term(textContent).getValue();
+            result = new Term(expression).getValue();
         }
+        return result;
     }
 
     /**
