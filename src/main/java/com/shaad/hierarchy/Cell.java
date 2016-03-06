@@ -4,8 +4,8 @@ package com.shaad.hierarchy;
  * Table cell.
  */
 public class Cell {
-    private String stringContent;
-    private String computedContent;
+    private String content;
+    private String value;
 
     public Cell() {
         this("");
@@ -13,38 +13,38 @@ public class Cell {
 
     public Cell(String content) {
         //todo: is it the best way to handle empty cell?
-        stringContent = (content.isEmpty()) ? "0" : content;
-        computedContent = compute();
+        this.content = (null == content || content.isEmpty()) ? "0" : content;
+        value = compute();
     }
 
     private String compute() {
         //todo: check for proper regexp for natural numbers
-        if (stringContent.matches("[1-9][0-9]*")) {
-            return stringContent;
-        } else if (stringContent.charAt(0) == '\'') {
-            return stringContent.substring(1);
-        } else if (stringContent.charAt(0) == '=') {
+        if (content.matches("[-]?[1-9][0-9]*|[0]")) {
+            return content;
+        } else if (content.charAt(0) == '\'') {
+            return content.substring(1);
+        } else if (content.charAt(0) == '=') {
             //todo: parse multiple expressions
-            return new Expression(stringContent.substring(1)).getResult();
+            return new Expression(content.substring(1)).getValue();
         } else {
             return "#Error"; //todo: create proper exception
         }
     }
-    
-    public String getStringContent() {
-        return stringContent;
+
+    public String getContent() {
+        return content;
     }
 
-    public void setStringContent(String stringContent) {
-        this.stringContent = stringContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getComputedContent() {
-        return computedContent;
+    public String getValue() {
+        return value;
     }
 
-    public void setComputedContent(String computedContent) {
-        this.computedContent = computedContent;
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

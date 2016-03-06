@@ -25,27 +25,22 @@ public class Term {
         }
     }
 
-    private int getLetterPosition(Character letter) {
-        final String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        return alphabet.indexOf(Character.toLowerCase(letter));
-    }
-
     public String getValue() {
         if (type.equals("number")) {
             return content;
         }
 
         if (type.equals("reference")) {
-            int rowNumber = getLetterPosition(content.charAt(0));
+            int rowNumber = Util.getLetterPosition(content.charAt(0));
             int columnNumber = Integer.parseInt(content.substring(1)) - 1;
 
             //todo: handle 'Text' content in referenced cell;
-            return new Cell(Main.tempTable[rowNumber][columnNumber]).getComputedContent();
+            return new Cell(Main.tempTable[rowNumber][columnNumber]).getValue();
         }
 
         if (type.equals("expression")) {
             //todo: handle 'Text' content in referenced cell;
-            return new Expression(content).getResult();
+            return new Expression(content).getValue();
         }
         return null; // todo: handle error properly;
     }

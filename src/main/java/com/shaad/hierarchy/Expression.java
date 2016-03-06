@@ -7,22 +7,22 @@ import java.util.Map;
  * //todo: write annotation
  */
 public class Expression {
-    private String textContent;
-    private String result;
+    private String content;
+    private String value;
 
     public Expression() {
         this("");
     }
 
     public Expression(String expressionString) {
-        textContent = expressionString;
-        result = compute();
+        content = expressionString;
+        value = compute();
     }
 
     //todo: try to refactor this method;
     private String compute() {
         String result = "";
-        String expression = textContent;
+        String expression = content;
         Operation operation = findFirstOperation(expression);
         boolean firstOperation = true;
         if (null != operation) {
@@ -87,15 +87,15 @@ public class Expression {
         return Integer.toString(result);
     }
 
-    public String getTextContent() {
-        return textContent;
+    public String getContent() {
+        return content;
     }
 
-    public void setTextContent(String textContent) {
-        this.textContent = textContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getResult() {
-        return result;
+    public String getValue() {
+        return value;
     }
 }

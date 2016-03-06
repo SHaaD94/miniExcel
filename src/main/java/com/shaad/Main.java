@@ -1,7 +1,6 @@
 package com.shaad;
 
-import com.shaad.hierarchy.Cell;
-import com.shaad.hierarchy.Expression;
+import com.shaad.table.MainForm;
 
 public class Main {
     //todo: should be removed;
@@ -9,8 +8,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        System.out.println(new Expression("232/444-3*2").getResult());
-
+//        System.out.println(new Expression("232/444-3*2").getValue());
+/*
         tempTable[1][0] = "1";
         tempTable[1][1] = "343";
 
@@ -20,7 +19,7 @@ public class Main {
         tempTable[0][3] = "=A1/A2*A1*A3";
         tempTable[0][4] = "5";
         tempTable[0][5] = "\'555";
-        tempTable[0][6] = "=555+a1*b2+a3/A10";
+        tempTable[0][6] = "=555+a1*b2+a3/A4+a6";
         tempTable[0][7] = "\'aaa";
         tempTable[0][8] = "=A8";
         tempTable[0][9] = "=B1+B2";
@@ -28,21 +27,21 @@ public class Main {
         int i = 0;
         for (String str : tempTable[0]) {
             if (null != str) {
-                System.out.println(new Cell(str).getComputedContent() + " " + i);
+                System.out.println(new Cell(str).getValue() + " " + i);
                 i++;
             }
-        }
-        //System.out.println(new Cell(tempTable[0][8]).getComputedContent());
-/*        System.out.println(new Cell(tempTable[0][6]).getComputedContent());
-        System.out.println(new Cell(tempTable[0][7]).getComputedContent());*/
+        }*/
+        //System.out.println(new Cell(tempTable[0][8]).getValue());
+/*        System.out.println(new Cell(tempTable[0][6]).getValue());
+        System.out.println(new Cell(tempTable[0][7]).getValue());*/
 
 /*
-        System.out.println(new Cell("=A1+B2").getComputedContent());
-        System.out.println(new Cell("=A1").getComputedContent());
-        System.out.println(new Cell("=5").getComputedContent());
-        System.out.println(new Cell("=b223").getComputedContent());
-        System.out.println(new Cell("=b223ff").getComputedContent());
-        System.out.println(new Cell("=5b").getComputedContent());
+        System.out.println(new Cell("=A1+B2").getValue());
+        System.out.println(new Cell("=A1").getValue());
+        System.out.println(new Cell("=5").getValue());
+        System.out.println(new Cell("=b223").getValue());
+        System.out.println(new Cell("=b223ff").getValue());
+        System.out.println(new Cell("=5b").getValue());
 */
 
 /*        new Expression("A1*A2");
@@ -55,7 +54,6 @@ public class Main {
         new Expression("12121");
         new Expression("12121*B3");*/
 
-
-        //MainForm form = new MainForm();
+        MainForm form = new MainForm();
     }
 }
