@@ -14,13 +14,12 @@ public class Cell {
     public Cell(String content) {
         //todo: is it the best way to handle empty cell?
         stringContent = (content.isEmpty()) ? "0" : content;
-        //stringContent = content;
         computedContent = compute();
     }
 
     private String compute() {
         //todo: check for proper regexp for natural numbers
-        if (stringContent.matches("[0-9]*")) {
+        if (stringContent.matches("[1-9][0-9]*")) {
             return stringContent;
         } else if (stringContent.charAt(0) == '\'') {
             return stringContent.substring(1);
@@ -31,7 +30,7 @@ public class Cell {
             return "#Error"; //todo: create proper exception
         }
     }
-
+    
     public String getStringContent() {
         return stringContent;
     }

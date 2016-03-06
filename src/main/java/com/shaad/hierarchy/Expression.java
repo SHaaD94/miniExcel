@@ -1,5 +1,8 @@
 package com.shaad.hierarchy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * //todo: write annotation
  */
@@ -11,33 +14,68 @@ public class Expression {
         this("");
     }
 
+/*
     public Expression(String expressionString) {
         textContent = expressionString;
-        Operation operation = findOperation();
+        Operation operation = findFirstOperation();
         if (null != operation) {
             Term term1 = new Term(textContent.substring(0, textContent.indexOf(operation.toString())));
             Term term2 = new Term(textContent.substring(textContent.indexOf(operation.toString()) + 1));
 
-            result = executeExpression(term1, term2, operation);
+            result = executeOperation(term1, term2, operation);
+        } else {
+            result = new Term(textContent).getValue();
+        }
+    }
+*/
+
+    public Expression(String expressionString) {
+        textContent = expressionString;
+        Operation operation = findFirstOperation(textContent);
+        boolean firstOperation = true;
+        result = "";
+        if (null != operation) {
+            while (null != operation) {
+                int operationSymbolIndex = textContent.indexOf(operation.toString());
+                Operation nextOperation = findFirstOperation(textContent.substring(operationSymbolIndex + 1));
+                int nextOperationIndex = (null == nextOperation) ? textContent.length() : textContent.indexOf(nextOperation.toString());
+                if (firstOperation) {
+                    Term term1 = new Term(textContent.substring(0, operationSymbolIndex));
+                    Term term2 = new Term(textContent.substring(operationSymbolIndex + 1, nextOperationIndex));
+                    result = executeOperation(term1, term2, operation);
+                    firstOperation = false;
+                } else {
+                    result = executeOperation(new Term(result), new Term(textContent.substring(operationSymbolIndex + 1,
+                            nextOperationIndex)), operation);
+                }
+                operation = nextOperation;
+            }
         } else {
             result = new Term(textContent).getValue();
         }
     }
 
     /**
-     * if null, it is only term.
+     * Return index of first operation or null
      */
-    public Operation findOperation() {
+    public Operation findFirstOperation(String str) {
+        HashMap<Operation, Integer> operations = new HashMap<>();
         for (Operation operation : Operation.values()) {
-            if (textContent.contains(operation.toString())) {
-                return operation;
+            if (str.contains(operation.toString())) {
+                operations.put(operation, str.indexOf(operation.toString()));
             }
         }
-        return null;
+
+        Map.Entry<Operation, Integer> first = null;
+        for (Map.Entry<Operation, Integer> element : operations.entrySet()) {
+            if (first == null || first.getValue() > element.getValue()) {
+                first = element;
+            }
+        }
+        return first != null ? first.getKey() : null;
     }
 
-    //todo: implement sane execution; (int)
-    public String executeExpression(Term term1, Term term2, Operation operation) {
+    public String executeOperation(Term term1, Term term2, Operation operation) {
         int term1Value = Integer.parseInt(term1.getValue());
         int term2Value = Integer.parseInt(term2.getValue());
 

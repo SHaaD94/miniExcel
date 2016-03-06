@@ -13,10 +13,12 @@ public class Term {
     public Term(String termContent) {
         content = termContent;
         //todo: get rid of 'string types' of content
-        if (content.matches("[a-zA-Z][0-9]*")) {
+        if (content.matches("[a-zA-Z][1-9][0-9]*")) {
             this.type = "reference";
-        } else if (content.matches("[0-9]*")) {
+        } else if (content.matches("[-]?[1-9][0-9]*|[0]")) {
             this.type = "number";
+        } else if (content.matches("[a-zA-Z]?[-]?[1-9][0-9]*([\\/*+-][a-zA-Z]?[1-9][0-9]*)*")) {
+            this.type = "expression";
         } else {
             this.type = "ERROR"; // todo: handle this error;
         }
@@ -38,6 +40,11 @@ public class Term {
 
             //todo: handle 'Text' content in referenced cell;
             return new Cell(Main.tempTable[rowNumber][columnNumber]).getComputedContent();
+        }
+
+        if (type.equals("expression")) {
+            //todo: handle 'Text' content in referenced cell;
+            return new Expression(content).getResult();
         }
         return null; // todo: handle error properly;
     }
