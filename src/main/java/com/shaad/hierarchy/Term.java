@@ -1,68 +1,81 @@
 package com.shaad.hierarchy;
 
 import com.shaad.Main;
+import com.shaad.enums.ValueType;
+import com.shaad.util.Util;
 
 public class Term {
     private String content;
-    private String type;
+    private String value;
+    /**
+     * Number, reference to cell, or expression
+     */
+    private String executionType;
 
-    public Term() {
-        this("");
-    }
+    /**
+     * Text or number
+     */
+    private ValueType valueType;
 
     public Term(String termContent) {
         content = termContent;
-        //todo: check for circular reference
+
         //todo: get rid of 'string types' of content
         if (content.matches("[a-zA-Z][1-9][0-9]*")) {
-            this.type = "reference";
+            this.executionType = "reference";
         } else if (content.matches("[-]?[1-9][0-9]*|[0]")) {
-            this.type = "number";
-        } else if (content.matches("[a-zA-Z]?[-]?[1-9][0-9]*([\\/*+-][a-zA-Z]?[1-9][0-9]*)*")) {
-            this.type = "expression";
+            this.executionType = "number";
+            //todo: check if this really unnecessary
+/*        } else if (content.matches("([a-zA-Z]|-)?[1-9][0-9]*([\\*//*+-][a-zA-Z]?[1-9][0-9]*)*")) {
+            this.executionType = "expression";*/
         } else {
-            this.type = "ERROR"; // todo: handle this error;
+            this.executionType = "#SyntaxErr"; // todo: handle this error;
         }
+        value = compute();
     }
 
-    public String getValue() {
-        if (type.equals("number")) {
+    private String compute() {
+        valueType = ValueType.NUMBER;
+        if (executionType.equals("number")) {
             return content;
         }
 
-        if (type.equals("reference")) {
-            int rowNumber = Util.getLetterPosition(content.charAt(0));
-            int columnNumber = Integer.parseInt(content.substring(1)) - 1;
-
+        if (executionType.equals("reference")) {
+            int rowNumber = Integer.parseInt(content.substring(1)) - 1;
+            int columnNumber = Util.getLetterPosition(content.charAt(0));
+            Cell referencedCell;
             //todo: handle 'Text' content in referenced cell;
-            return new Cell(Main.tempTable[rowNumber][columnNumber]).getValue();
+            try {
+                referencedCell = new Cell(Main.backendTable[rowNumber][columnNumber], true);
+            } catch (StackOverflowError e) {
+                return "#RecursiveReference";
+            }
+            valueType = referencedCell.getValueType();
+            return referencedCell.getValue();
         }
-
-        if (type.equals("expression")) {
-            //todo: handle 'Text' content in referenced cell;
-            return new Expression(content).getValue();
-        }
+/*           //todo: this too
+            if (executionType.equals("expression")) {
+                System.out.println("expression in term");
+                return new Expression(content).getValue();
+            }*/
         return null; // todo: handle error properly;
+
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public String getValue() {
+        return value;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public ValueType getValueType() {
+        return valueType;
     }
 
     @Override
     public String toString() {
-        return content + "(" + type + ")";
+        return content + "(" + executionType + ")";
     }
 }

@@ -3,15 +3,30 @@ package com.shaad;
 import com.shaad.table.MainForm;
 
 public class Main {
-    //todo: should be removed;
-    public static String[][] tempTable = new String[26][10];
+    public static final int TABLE_ROW_COUNT = 26;
+    public static final int TABLE_COLUMN_COUNT = 10;
+    public static String[][] backendTable;
+
+    private static void initializeTable() {
+        backendTable = new String[26][10];
+        for (int i = 0; i < TABLE_ROW_COUNT; i++) {
+            for (int j = 0; j < TABLE_COLUMN_COUNT; j++) {
+                backendTable[i][j] = "";
+            }
+        }
+    }
 
     public static void main(String[] args) {
+        initializeTable();
+        MainForm form = new MainForm();
 
 //        System.out.println(new Expression("232/444-3*2").getValue());
 /*
         tempTable[1][0] = "1";
-        tempTable[1][1] = "343";
+        tempTable[1][1] = "2";
+        tempTable[2][1] = "3";
+        tempTable[3][1] = "4";
+        tempTable[4][1] = "5";
 
         tempTable[0][0] = "120";
         tempTable[0][1] = "11";
@@ -22,9 +37,10 @@ public class Main {
         tempTable[0][6] = "=555+a1*b2+a3/A4+a6";
         tempTable[0][7] = "\'aaa";
         tempTable[0][8] = "=A8";
-        tempTable[0][9] = "=B1+B2";
+        tempTable[0][9] = "=B2+C2+C2+D2";
 
-        int i = 0;
+        System.out.println(new Cell(tempTable[0][9]).getValue());*/
+     /*   int i = 0;
         for (String str : tempTable[0]) {
             if (null != str) {
                 System.out.println(new Cell(str).getValue() + " " + i);
@@ -54,6 +70,6 @@ public class Main {
         new Expression("12121");
         new Expression("12121*B3");*/
 
-        MainForm form = new MainForm();
+
     }
 }

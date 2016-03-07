@@ -1,5 +1,8 @@
 package com.shaad.hierarchy;
 
+import com.shaad.enums.Operation;
+import com.shaad.enums.ValueType;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +13,11 @@ public class Expression {
     private String content;
     private String value;
 
-    public Expression() {
-        this("");
-    }
+    private ValueType valueType;
 
     public Expression(String expressionString) {
         content = expressionString;
+        valueType = ValueType.NUMBER;
         value = compute();
     }
 
@@ -31,20 +33,27 @@ public class Expression {
                 Operation nextOperation = findFirstOperation(expression.substring(currentOperationIndex + 1));
                 int nextOperationIndex = (null == nextOperation) ? expression.length() :
                         expression.indexOf(nextOperation.toString(), currentOperationIndex + 1);
+                Term term1, term2;
                 if (firstOperation) {
-                    Term term1 = new Term(expression.substring(0, currentOperationIndex));
-                    Term term2 = new Term(expression.substring(currentOperationIndex + 1, nextOperationIndex));
-                    result = executeOperation(term1, term2, operation);
+                    term1 = new Term(expression.substring(0, currentOperationIndex));
+                    term2 = new Term(expression.substring(currentOperationIndex + 1, nextOperationIndex));
                     firstOperation = false;
                 } else {
-                    result = executeOperation(new Term(result), new Term(expression.substring(currentOperationIndex + 1,
-                            nextOperationIndex)), operation);
+                    term1 = new Term(result);
+                    term2 = new Term(expression.substring(currentOperationIndex + 1, nextOperationIndex));
+                }
+                try {
+                    result = executeOperation(term1, term2, operation);
+                } catch (IllegalArgumentException e) {
+                    return "#WrongArgument";
                 }
                 expression = expression.replaceFirst("\\" + operation.toString(), "~");
                 operation = nextOperation;
             }
         } else {
-            result = new Term(expression).getValue();
+            Term resultTerm = new Term(expression);
+            valueType = resultTerm.getValueType();
+            result = resultTerm.getValue();
         }
         return result;
     }
@@ -69,7 +78,10 @@ public class Expression {
         return first != null ? first.getKey() : null;
     }
 
-    public String executeOperation(Term term1, Term term2, Operation operation) {
+    public String executeOperation(Term term1, Term term2, Operation operation) throws IllegalArgumentException {
+        if (term1.getValueType() == ValueType.TEXT || term2.getValueType() == ValueType.TEXT) {
+            throw new IllegalArgumentException();
+        }
         int term1Value = Integer.parseInt(term1.getValue());
         int term2Value = Integer.parseInt(term2.getValue());
 
@@ -97,5 +109,9 @@ public class Expression {
 
     public String getValue() {
         return value;
+    }
+
+    public ValueType getValueType() {
+        return valueType;
     }
 }

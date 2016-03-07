@@ -1,4 +1,4 @@
-package com.shaad.hierarchy;
+package com.shaad.enums;
 
 /**
  * Basic operations.

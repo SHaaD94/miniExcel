@@ -1,8 +1,12 @@
 package com.shaad.table;
 
-import java.awt.event.*;
-import javax.swing.*;
-import java.beans.*;
+import com.shaad.Main;
+import com.shaad.hierarchy.Cell;
+
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /*
  *  This class listens for changes made to the data in the table via the
@@ -14,8 +18,6 @@ import java.beans.*;
  */
 public class TableCellListener implements PropertyChangeListener, Runnable {
     private JTable table;
-    private Action action;
-
     private int row;
     private int column;
     private Object oldValue;
@@ -28,33 +30,7 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
      */
     public TableCellListener(JTable table) {
         this.table = table;
-        this.action = new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                TableCellListener tcl = (TableCellListener) e.getSource();
-                System.out.println("Row   : " + tcl.getRow());
-                System.out.println("Column: " + tcl.getColumn());
-                System.out.println("Old   : " + tcl.getOldValue());
-                System.out.println("New   : " + tcl.getNewValue());
-            }
-        };
         this.table.addPropertyChangeListener(this);
-    }
-
-    /**
-     * Create a TableCellListener with a copy of all the data relevant to
-     * the change of data for a given cell.
-     *
-     * @param row      the row of the changed cell
-     * @param column   the column of the changed cell
-     * @param oldValue the old data of the changed cell
-     * @param newValue the new data of the changed cell
-     */
-    private TableCellListener(JTable table, int row, int column, Object oldValue, Object newValue) {
-        this.table = table;
-        this.row = row;
-        this.column = column;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
     }
 
     /**
@@ -107,8 +83,6 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
 //
     @Override
     public void propertyChange(PropertyChangeEvent e) {
-        //  A cell has started/stopped editing
-
         if ("tableCellEditor".equals(e.getPropertyName())) {
             if (table.isEditing())
                 processEditingStarted();
@@ -117,50 +91,46 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         }
     }
 
-    /*
-     *  Save information of the cell about to be edited
-     */
     private void processEditingStarted() {
-        //  The invokeLater is necessary because the editing row and editing
-        //  column of the table have not been set when the "tableCellEditor"
-        //  PropertyChangeEvent is fired.
-        //  This results in the "run" method being invoked
-        System.out.println("started");
         SwingUtilities.invokeLater(this);
     }
 
-    /*
-     *  See above.
-     */
     @Override
     public void run() {
         row = table.convertRowIndexToModel(table.getEditingRow());
         column = table.convertColumnIndexToModel(table.getEditingColumn());
         oldValue = table.getModel().getValueAt(row, column);
         newValue = null;
+
+        //todo: fill cell which is being edited
+        table.setValueAt("asdasd", row, column);
     }
 
-    /*
-     *	Update the Cell history when necessary
-     */
     private void processEditingStopped() {
         newValue = table.getModel().getValueAt(row, column);
 
-        //  The data has changed, invoke the supplied Action
-
-        System.out.println("finished");
         if (null != newValue && !newValue.equals(oldValue)) {
-            //  Make a copy of the data in case another cell starts editing
-            //  while processing this change
-
-            TableCellListener tcl = new TableCellListener(
-                    getTable(), getRow(), getColumn(), getOldValue(), getNewValue());
-
-            ActionEvent event = new ActionEvent(
-                    tcl,
-                    ActionEvent.ACTION_PERFORMED,
-                    "");
-            action.actionPerformed(event);
+            Main.backendTable[row][column] = (String) newValue;
+            refillTable();
         }
     }
+
+    private void refillTable() {
+        for (int i = 0; i < Main.TABLE_ROW_COUNT; i++) {
+            for (int j = 0; j < Main.TABLE_COLUMN_COUNT; j++) {
+                Cell cell = new Cell(Main.backendTable[i][j]);
+                if (null != cell.getContent() && !cell.getContent().equals(" ")) {
+                    //todo: get rid of this catch
+                    try {
+                        String cellValue = cell.getValue();
+                        table.setValueAt(cellValue, i, j);
+                    } catch (Throwable e) {
+                        //todo: proper logging
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
 }

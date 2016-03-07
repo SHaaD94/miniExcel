@@ -1,4 +1,4 @@
-package com.shaad.hierarchy;
+package com.shaad.util;
 
 public class Util {
     private Util() {
