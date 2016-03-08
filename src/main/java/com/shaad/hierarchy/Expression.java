@@ -2,6 +2,7 @@ package com.shaad.hierarchy;
 
 import com.shaad.enums.Operation;
 import com.shaad.enums.ValueType;
+import com.sun.xml.internal.ws.wsdl.writer.document.OpenAtts;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,20 +67,18 @@ public class Expression {
      * Return index of first operation or null
      */
     public Operation findFirstOperation(String str) {
-        HashMap<Operation, Integer> operations = new HashMap<>();
-        for (Operation operation : Operation.values()) {
-            if (str.contains(operation.toString())) {
-                operations.put(operation, str.indexOf(operation.toString()));
+        for (char symb : str.toCharArray()) {
+            if (symb == '+') {
+                return Operation.PLUS;
+            } else if (symb == '-') {
+                return Operation.MINUS;
+            } else if (symb == '*') {
+                return Operation.MULTIPLY;
+            } else if (symb == '/') {
+                return Operation.DEVIDE;
             }
         }
-
-        Map.Entry<Operation, Integer> first = null;
-        for (Map.Entry<Operation, Integer> element : operations.entrySet()) {
-            if (first == null || first.getValue() > element.getValue()) {
-                first = element;
-            }
-        }
-        return first != null ? first.getKey() : null;
+        return null;
     }
 
     public String executeOperation(Term term1, Term term2, Operation operation) throws IllegalArgumentException {
