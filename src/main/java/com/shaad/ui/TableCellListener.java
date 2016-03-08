@@ -1,4 +1,4 @@
-package com.shaad.table;
+package com.shaad.ui;
 
 import com.shaad.Main;
 import com.shaad.hierarchy.Cell;
@@ -26,7 +26,7 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
     /**
      * Create a TableCellListener.
      *
-     * @param table the table to be monitored for data changes
+     * @param table the ui to be monitored for data changes
      */
     public TableCellListener(JTable table) {
         this.table = table;
@@ -101,10 +101,8 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         column = table.convertColumnIndexToModel(table.getEditingColumn());
         oldValue = table.getModel().getValueAt(row, column);
         newValue = null;
-
-        //todo: fill cell which is being edited
-        table.setValueAt("asdasd", row, column);
     }
+
 
     private void processEditingStopped() {
         newValue = table.getModel().getValueAt(row, column);
@@ -120,14 +118,8 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
             for (int j = 0; j < Main.TABLE_COLUMN_COUNT; j++) {
                 Cell cell = new Cell(Main.backendTable[i][j]);
                 if (null != cell.getContent() && !cell.getContent().equals(" ")) {
-                    //todo: get rid of this catch
-                    try {
-                        String cellValue = cell.getValue();
-                        table.setValueAt(cellValue, i, j);
-                    } catch (Throwable e) {
-                        //todo: proper logging
-                        e.printStackTrace();
-                    }
+                    String cellValue = cell.getValue();
+                    table.setValueAt(cellValue, i, j);
                 }
             }
         }

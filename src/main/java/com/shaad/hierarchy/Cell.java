@@ -37,7 +37,7 @@ public class Cell {
             valueType = resultExpression.getValueType();
             return resultExpression.getValue();
         } else {
-            return "#Error"; //todo: create proper exception
+            return "#SyntaxError";
         }
     }
 

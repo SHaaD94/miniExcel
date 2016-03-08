@@ -22,16 +22,14 @@ public class Term {
 
         //todo: get rid of 'string types' of content
         if (content.matches("[a-zA-Z][1-9][0-9]*")) {
-            this.executionType = "reference";
+            executionType = "reference";
         } else if (content.matches("[-]?[1-9][0-9]*|[0]")) {
-            this.executionType = "number";
-            //todo: check if this really unnecessary
-/*        } else if (content.matches("([a-zA-Z]|-)?[1-9][0-9]*([\\*//*+-][a-zA-Z]?[1-9][0-9]*)*")) {
-            this.executionType = "expression";*/
+            executionType = "number";
         } else {
-            this.executionType = "#SyntaxErr"; // todo: handle this error;
+            executionType = "#SyntaxError"; // todo: handle this error;
         }
-        value = compute();
+
+        value = !executionType.equals("#SyntaxError") ? compute() : executionType;
     }
 
     private String compute() {
@@ -44,7 +42,6 @@ public class Term {
             int rowNumber = Integer.parseInt(content.substring(1)) - 1;
             int columnNumber = Util.getLetterPosition(content.charAt(0));
             Cell referencedCell;
-            //todo: handle 'Text' content in referenced cell;
             try {
                 referencedCell = new Cell(Main.backendTable[rowNumber][columnNumber], true);
             } catch (StackOverflowError e) {
@@ -53,13 +50,8 @@ public class Term {
             valueType = referencedCell.getValueType();
             return referencedCell.getValue();
         }
-/*           //todo: this too
-            if (executionType.equals("expression")) {
-                System.out.println("expression in term");
-                return new Expression(content).getValue();
-            }*/
-        return null; // todo: handle error properly;
 
+        return null;
     }
 
     public String getValue() {

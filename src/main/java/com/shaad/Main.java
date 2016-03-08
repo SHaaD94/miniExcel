@@ -1,14 +1,14 @@
 package com.shaad;
 
-import com.shaad.table.MainForm;
+import com.shaad.ui.MainForm;
 
 public class Main {
     public static final int TABLE_ROW_COUNT = 26;
-    public static final int TABLE_COLUMN_COUNT = 10;
+    public static final int TABLE_COLUMN_COUNT = 26;
     public static String[][] backendTable;
 
     private static void initializeTable() {
-        backendTable = new String[26][10];
+        backendTable = new String[TABLE_ROW_COUNT][TABLE_COLUMN_COUNT];
         for (int i = 0; i < TABLE_ROW_COUNT; i++) {
             for (int j = 0; j < TABLE_COLUMN_COUNT; j++) {
                 backendTable[i][j] = "";

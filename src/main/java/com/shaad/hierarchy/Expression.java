@@ -25,6 +25,10 @@ public class Expression {
     private String compute() {
         String result = "";
         String expression = content;
+        if (expression.isEmpty()) {
+            valueType = ValueType.NUMBER;
+            return "0";
+        }
         Operation operation = findFirstOperation(expression);
         boolean firstOperation = true;
         if (null != operation) {
