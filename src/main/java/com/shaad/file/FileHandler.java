@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FileHandler {
+    private TableHolder tableHolder = TableHolder.getInstance();
     private Logger log = Logger.getLogger(FileHandler.class.getName());
 
     private int rowCount = 0;
@@ -54,14 +55,14 @@ public class FileHandler {
                 return;
             }
 
-            if (columnCount > TableHolder.tableColumnCount) {
+            if (columnCount > Util.getAlphabetLength()) {
                 System.out.println("Too big column count");
                 return;
             }
 
-            TableHolder.tableRowCount = rowCount;
-            TableHolder.tableColumnCount = columnCount;
-            TableHolder.initializeTable();
+            tableHolder.setTableRowCount(rowCount);
+            tableHolder.setTableColumnCount(columnCount);
+            tableHolder.initializeTable();
 
             int currentRow = 0;
             for (String str : lineList) {
@@ -69,7 +70,7 @@ public class FileHandler {
                     break;
                 }
                 String[] cells = parseLine(str);
-                System.arraycopy(cells, 0, TableHolder.backendTable[currentRow],
+                System.arraycopy(cells, 0, tableHolder.getBackendTable()[currentRow],
                         0, ((cells.length >= columnCount) ? columnCount : cells.length));
                 currentRow++;
             }
@@ -85,7 +86,7 @@ public class FileHandler {
         String[][] computedTable = new String[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                computedTable[i][j] = new Cell(TableHolder.backendTable[i][j]).getValue();
+                computedTable[i][j] = new Cell(tableHolder.getBackendTable()[i][j]).getValue();
             }
         }
 

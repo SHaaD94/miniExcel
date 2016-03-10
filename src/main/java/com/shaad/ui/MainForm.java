@@ -15,9 +15,11 @@ public class MainForm extends JFrame {
 
     public MainForm() {
         super("Excel");
+
         JPanel rootPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JTable mainTable = new CustomJTable(TableHolder.tableRowCount, TableHolder.tableColumnCount);
-        TableHolder.initializeTable();
+        JTable mainTable = new CustomJTable(TableHolder.getInstance().getTableRowCount(),
+                TableHolder.getInstance().getTableColumnCount());
+        TableHolder.getInstance().initializeTable();
 
         mainTable.putClientProperty("terminateEditOnFocusLost", true);
 

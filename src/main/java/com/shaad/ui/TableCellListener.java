@@ -12,6 +12,7 @@ import java.beans.PropertyChangeListener;
  *  This class used to detect cell changed event.
  */
 public class TableCellListener implements PropertyChangeListener, Runnable {
+    private TableHolder tableHolder = TableHolder.getInstance();
     private JTable table;
     private int row;
     private int column;
@@ -55,15 +56,15 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         newValue = table.getModel().getValueAt(row, column);
 
         if (null != newValue && !newValue.equals(oldValue)) {
-            TableHolder.backendTable[row][column] = (String) newValue;
+            tableHolder.getBackendTable()[row][column] = (String) newValue;
             refillTable();
         }
     }
 
     private void refillTable() {
-        for (int i = 0; i < TableHolder.tableRowCount; i++) {
-            for (int j = 0; j < TableHolder.tableColumnCount; j++) {
-                Cell cell = new Cell(TableHolder.backendTable[i][j]);
+        for (int i = 0; i < tableHolder.getTableRowCount(); i++) {
+            for (int j = 0; j < tableHolder.getTableColumnCount(); j++) {
+                Cell cell = new Cell(tableHolder.getBackendTable()[i][j]);
                 if (null != cell.getContent() && !cell.getContent().equals(" ")) {
                     String cellValue = cell.getValue();
                     table.setValueAt(cellValue, i, j);

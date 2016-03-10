@@ -53,7 +53,7 @@ public class Term {
             int columnNumber = Util.getLetterPosition(content.charAt(0));
             Cell referencedCell;
             try {
-                referencedCell = new Cell(TableHolder.backendTable[rowNumber][columnNumber], true);
+                referencedCell = new Cell(TableHolder.getInstance().getBackendTable()[rowNumber][columnNumber], true);
             } catch (StackOverflowError e) {
                 return "#RecursiveReference";
             } catch (ArrayIndexOutOfBoundsException e) {

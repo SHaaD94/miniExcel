@@ -16,7 +16,7 @@ public class CustomJTable extends JTable {
     public Component prepareEditor(TableCellEditor editor, int row, int column) {
         Component c = super.prepareEditor(editor, row, column);
         if (c instanceof JTextComponent) {
-            ((JTextComponent) c).setText(TableHolder.backendTable[row][column]);
+            ((JTextComponent) c).setText(TableHolder.getInstance().getBackendTable()[row][column]);
         }
         return c;
     }

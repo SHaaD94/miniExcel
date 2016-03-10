@@ -1,5 +1,5 @@
 4               4
-1               2       3       5
-=a1+a3          =b1*c1  'text   =d1/a1
-=c1             =a1+a2  =d1/b2  =d3
-=ffff           ss      33      =c1+a1
+1               2          3       5
+=a1+a3          =b1*c1     'text   =d1/a1
+=c1             =a1+a2     =d1/b2  =d3
+=ffff           =100500/0  33      =c1+a1
