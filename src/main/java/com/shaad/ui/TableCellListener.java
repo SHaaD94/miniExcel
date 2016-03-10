@@ -1,7 +1,7 @@
 package com.shaad.ui;
 
-import com.shaad.Runner;
 import com.shaad.entities.Cell;
+import com.shaad.entities.TableHolder;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -9,12 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /*
- *  This class listens for changes made to the data in the table via the
- *  TableCellEditor. When editing is started, the value of the cell is saved
- *  When editing is stopped the new value is saved. When the oold and new
- *  values are different, then the provided Action is invoked.
- *
- *  The source of the Action is a TableCellListener instance.
+ *  This class used to detect cell changed event.
  */
 public class TableCellListener implements PropertyChangeListener, Runnable {
     private JTable table;
@@ -60,15 +55,15 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         newValue = table.getModel().getValueAt(row, column);
 
         if (null != newValue && !newValue.equals(oldValue)) {
-            Runner.backendTable[row][column] = (String) newValue;
+            TableHolder.backendTable[row][column] = (String) newValue;
             refillTable();
         }
     }
 
     private void refillTable() {
-        for (int i = 0; i < Runner.TABLE_ROW_COUNT; i++) {
-            for (int j = 0; j < Runner.TABLE_COLUMN_COUNT; j++) {
-                Cell cell = new Cell(Runner.backendTable[i][j]);
+        for (int i = 0; i < TableHolder.tableRowCount; i++) {
+            for (int j = 0; j < TableHolder.tableColumnCount; j++) {
+                Cell cell = new Cell(TableHolder.backendTable[i][j]);
                 if (null != cell.getContent() && !cell.getContent().equals(" ")) {
                     String cellValue = cell.getValue();
                     table.setValueAt(cellValue, i, j);

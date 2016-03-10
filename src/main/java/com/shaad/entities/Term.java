@@ -1,19 +1,27 @@
 package com.shaad.entities;
 
-import com.shaad.Runner;
+import com.shaad.enums.TermExecutionType;
 import com.shaad.enums.ValueType;
 import com.shaad.util.Util;
 
+/**
+ * Term of cell expressions.
+ */
 public class Term {
-    private String content;
-    private String value;
     /**
-     * Number, reference to cell, or expression
+     * Input content.
      */
-    private String executionType;
-
+    private String content;
     /**
-     * Text or number
+     * Computed value of content.
+     */
+    private String value = null;
+    /**
+     * Execution type.
+     */
+    private TermExecutionType executionType;
+    /**
+     * Text or number.
      */
     private ValueType valueType;
 
@@ -22,28 +30,30 @@ public class Term {
 
         //todo: get rid of 'string types' of content
         if (content.matches("[a-zA-Z][1-9][0-9]*")) {
-            executionType = "reference";
+            executionType = TermExecutionType.REFERENCE;
         } else if (content.matches("[-]?[1-9][0-9]*|[0]")) {
-            executionType = "number";
+            executionType = TermExecutionType.NUMBER;
         } else {
-            executionType = "#SyntaxError"; // todo: handle this error;
+            value = "#SyntaxError";
+            return;
         }
 
-        value = !executionType.equals("#SyntaxError") ? compute() : executionType;
+        //value = !executionType.equals("#SyntaxError") ? compute() : executionType;
+        value = compute();
     }
 
     private String compute() {
         valueType = ValueType.NUMBER;
-        if (executionType.equals("number")) {
+        if (executionType == TermExecutionType.NUMBER) {
             return content;
         }
 
-        if (executionType.equals("reference")) {
+        if (executionType == TermExecutionType.REFERENCE) {
             int rowNumber = Integer.parseInt(content.substring(1)) - 1;
             int columnNumber = Util.getLetterPosition(content.charAt(0));
             Cell referencedCell;
             try {
-                referencedCell = new Cell(Runner.backendTable[rowNumber][columnNumber], true);
+                referencedCell = new Cell(TableHolder.backendTable[rowNumber][columnNumber], true);
             } catch (StackOverflowError e) {
                 return "#RecursiveReference";
             } catch (ArrayIndexOutOfBoundsException e) {

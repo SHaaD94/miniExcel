@@ -1,6 +1,6 @@
 package com.shaad.ui;
 
-import com.shaad.Runner;
+import com.shaad.entities.TableHolder;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
@@ -16,7 +16,7 @@ public class CustomJTable extends JTable {
     public Component prepareEditor(TableCellEditor editor, int row, int column) {
         Component c = super.prepareEditor(editor, row, column);
         if (c instanceof JTextComponent) {
-            ((JTextComponent) c).setText(Runner.backendTable[row][column]);
+            ((JTextComponent) c).setText(TableHolder.backendTable[row][column]);
         }
         return c;
     }

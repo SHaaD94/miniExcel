@@ -4,12 +4,20 @@ import com.shaad.enums.Operation;
 import com.shaad.enums.ValueType;
 
 /**
- * //todo: write annotation
+ * Expression.
  */
 public class Expression {
+    /**
+     * Input content of expression.
+     */
     private String content;
+    /**
+     * Computed value of expression.
+     */
     private String value;
-
+    /**
+     * Value type of expression.
+     */
     private ValueType valueType;
 
     public Expression(String expressionString) {
@@ -18,7 +26,11 @@ public class Expression {
         value = compute();
     }
 
-    //todo: try to refactor this method;
+    /**
+     * Compute value.
+     *
+     * @return String value of expression.
+     */
     private String compute() {
         String result = "";
         String expression = content;
@@ -46,7 +58,9 @@ public class Expression {
                 try {
                     result = executeOperation(term1, term2, operation);
                 } catch (IllegalArgumentException e) {
-                    return "#WrongArgument";
+                    return "#IllegalArgument";
+                } catch (ArithmeticException e) {
+                    return "#DevideByZero";
                 }
                 expression = expression.replaceFirst("\\" + operation.toString(), "~");
                 operation = nextOperation;
@@ -77,7 +91,18 @@ public class Expression {
         return null;
     }
 
-    public String executeOperation(Term term1, Term term2, Operation operation) throws IllegalArgumentException {
+    /**
+     * Execute operation.
+     *
+     * @param term1     first term
+     * @param term2     second term
+     * @param operation operation
+     * @return string value
+     * @throws IllegalArgumentException thrown in case if one of terms isn't number
+     * @throws ArithmeticException      in cases of devide by zero
+     */
+    public String executeOperation(Term term1, Term term2, Operation operation)
+            throws IllegalArgumentException, ArithmeticException {
         if (term1.getValueType() == ValueType.TEXT || term2.getValueType() == ValueType.TEXT) {
             throw new IllegalArgumentException();
         }

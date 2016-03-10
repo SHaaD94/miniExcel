@@ -6,8 +6,17 @@ import com.shaad.enums.ValueType;
  * Table cell.
  */
 public class Cell {
+    /**
+     * Input content of cell.
+     */
     private String content;
+    /**
+     * Computed value of cell.
+     */
     private String value;
+    /**
+     * Cell value type.
+     */
     private ValueType valueType;
 
     public Cell(String content) {
@@ -16,7 +25,7 @@ public class Cell {
 
     public Cell(String content, boolean referencedFromTerm) {
         valueType = ValueType.NUMBER;
-        //todo: is it the best way to handle empty cell?
+        // required to get "0" if referenced from another cell and empty if not
         if (null == content || content.isEmpty()) {
             if (!referencedFromTerm) {
                 this.content = " ";

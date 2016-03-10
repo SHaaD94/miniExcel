@@ -1,7 +1,7 @@
 package com.shaad.file;
 
-import com.shaad.Runner;
 import com.shaad.entities.Cell;
+import com.shaad.entities.TableHolder;
 import com.shaad.util.Util;
 
 import java.io.IOException;
@@ -54,15 +54,14 @@ public class FileHandler {
                 return;
             }
 
-            if (rowCount > Runner.TABLE_ROW_COUNT) {
-                Runner.TABLE_ROW_COUNT = rowCount;
-                Runner.initializeTable();
-            }
-
-            if (columnCount > Runner.TABLE_COLUMN_COUNT) {
+            if (columnCount > TableHolder.tableColumnCount) {
                 System.out.println("Too big column count");
                 return;
             }
+
+            TableHolder.tableRowCount = rowCount;
+            TableHolder.tableColumnCount = columnCount;
+            TableHolder.initializeTable();
 
             int currentRow = 0;
             for (String str : lineList) {
@@ -70,7 +69,7 @@ public class FileHandler {
                     break;
                 }
                 String[] cells = parseLine(str);
-                System.arraycopy(cells, 0, Runner.backendTable[currentRow],
+                System.arraycopy(cells, 0, TableHolder.backendTable[currentRow],
                         0, ((cells.length >= columnCount) ? columnCount : cells.length));
                 currentRow++;
             }
@@ -82,10 +81,19 @@ public class FileHandler {
     }
 
     public void printComputedTable() {
-        int maxCellLength = Util.getLargestCellLength(Runner.backendTable);
+        //compute
+        String[][] computedTable = new String[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                String outputCell = new Cell(Runner.backendTable[i][j]).getValue();
+                computedTable[i][j] = new Cell(TableHolder.backendTable[i][j]).getValue();
+            }
+        }
+
+        int maxCellLength = Util.getLargestCellLength(computedTable);
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                String outputCell = computedTable[i][j];
+                //format
                 while (outputCell.length() < maxCellLength) {
                     outputCell += " ";
                 }
