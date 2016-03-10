@@ -46,6 +46,8 @@ public class Term {
                 referencedCell = new Cell(Runner.backendTable[rowNumber][columnNumber], true);
             } catch (StackOverflowError e) {
                 return "#RecursiveReference";
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return "#CellDoesNotExist";
             }
             valueType = referencedCell.getValueType();
             return referencedCell.getValue();

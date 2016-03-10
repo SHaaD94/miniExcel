@@ -6,10 +6,15 @@ import com.shaad.util.Util;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileHandler {
+    private Logger log = Logger.getLogger(FileHandler.class.getName());
+
     private int rowCount = 0;
     private int columnCount = 0;
 
@@ -18,31 +23,61 @@ public class FileHandler {
     }
 
     private String[] parseLine(String line) {
-        //set correct array size;
         line = line.replaceAll("\t", " ");
-        line = line.replaceAll("\\ +", " ");
+        line = line.replaceAll(" +", " ");
         return line.split(" ");
     }
 
     public void parseFile(String filePath) {
-
         try {
             List<String> lineList = Files.readAllLines(Paths.get(filePath));
-            String firstLine = lineList.get(0);
+            if (lineList.isEmpty()) {
+                System.out.println("File is empty");
+                return;
+            }
+            String[] tableSize = parseLine(lineList.get(0));
             lineList.remove(0);
-            rowCount = Integer.parseInt(firstLine.substring(0, firstLine.indexOf(' ')));
-            columnCount = Integer.parseInt(firstLine.substring(firstLine.indexOf(' ') + 1));
+            if (tableSize.length < 2) {
+                System.out.println("Wrong table size parameters");
+                return;
+            }
+            try {
+                rowCount = Integer.parseInt(tableSize[0]);
+                columnCount = Integer.parseInt(tableSize[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong table size parameters");
+                return;
+            }
+
+            if (rowCount <= 0 || columnCount <= 0) {
+                System.out.println("Wrong table size parameters");
+                return;
+            }
+
+            if (rowCount > Runner.TABLE_ROW_COUNT) {
+                Runner.TABLE_ROW_COUNT = rowCount;
+                Runner.initializeTable();
+            }
+
+            if (columnCount > Runner.TABLE_COLUMN_COUNT) {
+                System.out.println("Too big column count");
+                return;
+            }
 
             int currentRow = 0;
             for (String str : lineList) {
-                //todo: correct this filling
+                if (currentRow > rowCount) {
+                    break;
+                }
                 String[] cells = parseLine(str);
-                System.arraycopy(cells, 0, Runner.backendTable[currentRow], 0, cells.length);
+                System.arraycopy(cells, 0, Runner.backendTable[currentRow],
+                        0, ((cells.length >= columnCount) ? columnCount : cells.length));
                 currentRow++;
             }
+        } catch (NoSuchFileException e) {
+            System.out.println("No such file");
         } catch (IOException e) {
-            //todo: proper logging
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error parsing file", e);
         }
     }
 

@@ -94,16 +94,11 @@ public class Expression {
         } else if (operation == Operation.DEVIDE) {
             result = term1Value / term2Value;
         }
-        //todo: handle exception
         return Integer.toString(result);
     }
 
     public String getContent() {
         return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getValue() {

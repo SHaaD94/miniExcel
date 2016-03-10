@@ -33,54 +33,6 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         this.table.addPropertyChangeListener(this);
     }
 
-    /**
-     * Get the column that was last edited
-     *
-     * @return the column that was edited
-     */
-    public int getColumn() {
-        return column;
-    }
-
-    /**
-     * Get the new value in the cell
-     *
-     * @return the new value in the cell
-     */
-    public Object getNewValue() {
-        return newValue;
-    }
-
-    /**
-     * Get the old value of the cell
-     *
-     * @return the old value of the cell
-     */
-    public Object getOldValue() {
-        return oldValue;
-    }
-
-    /**
-     * Get the row that was last edited
-     *
-     * @return the row that was edited
-     */
-    public int getRow() {
-        return row;
-    }
-
-    /**
-     * Get the table of the cell that was changed
-     *
-     * @return the table of the cell that was changed
-     */
-    public JTable getTable() {
-        return table;
-    }
-
-    //
-//  Implement the PropertyChangeListener interface
-//
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         if ("tableCellEditor".equals(e.getPropertyName())) {

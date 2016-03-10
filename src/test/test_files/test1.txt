@@ -1,0 +1,6 @@
+5           5
+=a2         1   'text =b1    =c1
+1           =b2 3     4      5
+wwqe        2   =a1   =c3    5
+1           2   =c1   =c1+c3 'sdasdasd
+=a2+b3+c3   3   2     ff     4
