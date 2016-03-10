@@ -1,7 +1,7 @@
 package com.shaad.ui;
 
-import com.shaad.Main;
-import com.shaad.hierarchy.Cell;
+import com.shaad.Runner;
+import com.shaad.entities.Cell;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -108,15 +108,15 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         newValue = table.getModel().getValueAt(row, column);
 
         if (null != newValue && !newValue.equals(oldValue)) {
-            Main.backendTable[row][column] = (String) newValue;
+            Runner.backendTable[row][column] = (String) newValue;
             refillTable();
         }
     }
 
     private void refillTable() {
-        for (int i = 0; i < Main.TABLE_ROW_COUNT; i++) {
-            for (int j = 0; j < Main.TABLE_COLUMN_COUNT; j++) {
-                Cell cell = new Cell(Main.backendTable[i][j]);
+        for (int i = 0; i < Runner.TABLE_ROW_COUNT; i++) {
+            for (int j = 0; j < Runner.TABLE_COLUMN_COUNT; j++) {
+                Cell cell = new Cell(Runner.backendTable[i][j]);
                 if (null != cell.getContent() && !cell.getContent().equals(" ")) {
                     String cellValue = cell.getValue();
                     table.setValueAt(cellValue, i, j);

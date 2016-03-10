@@ -1,11 +1,7 @@
-package com.shaad.hierarchy;
+package com.shaad.entities;
 
 import com.shaad.enums.Operation;
 import com.shaad.enums.ValueType;
-import com.sun.xml.internal.ws.wsdl.writer.document.OpenAtts;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * //todo: write annotation

@@ -1,6 +1,6 @@
-package com.shaad.hierarchy;
+package com.shaad.entities;
 
-import com.shaad.Main;
+import com.shaad.Runner;
 import com.shaad.enums.ValueType;
 import com.shaad.util.Util;
 
@@ -43,7 +43,7 @@ public class Term {
             int columnNumber = Util.getLetterPosition(content.charAt(0));
             Cell referencedCell;
             try {
-                referencedCell = new Cell(Main.backendTable[rowNumber][columnNumber], true);
+                referencedCell = new Cell(Runner.backendTable[rowNumber][columnNumber], true);
             } catch (StackOverflowError e) {
                 return "#RecursiveReference";
             }

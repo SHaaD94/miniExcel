@@ -26,7 +26,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.shaad.Main</mainClass>
+                            <mainClass>com.shaad.Runner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

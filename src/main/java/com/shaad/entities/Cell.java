@@ -1,4 +1,4 @@
-package com.shaad.hierarchy;
+package com.shaad.entities;
 
 import com.shaad.enums.ValueType;
 
@@ -17,12 +17,17 @@ public class Cell {
     public Cell(String content, boolean referencedFromTerm) {
         valueType = ValueType.NUMBER;
         //todo: is it the best way to handle empty cell?
-        if (!referencedFromTerm) {
-            this.content = (null == content || content.isEmpty()) ? " " : content;
-            value = compute();
+        if (null == content || content.isEmpty()) {
+            if (!referencedFromTerm) {
+                this.content = " ";
+                this.value = " ";
+            } else {
+                this.content = "0";
+                this.value = "0";
+            }
         } else {
-            this.content = (null == content || content.isEmpty()) ? "0" : content;
-            value = compute();
+            this.content = content;
+            this.value = compute();
         }
     }
 
@@ -52,6 +57,5 @@ public class Cell {
     public ValueType getValueType() {
         return valueType;
     }
-
 
 }

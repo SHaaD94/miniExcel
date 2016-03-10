@@ -1,6 +1,6 @@
 package com.shaad.ui;
 
-import com.shaad.Main;
+import com.shaad.Runner;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +16,7 @@ public class MainForm extends JFrame {
     public MainForm() {
         super("Excel");
         JPanel rootPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JTable mainTable = new MyJTable(Main.TABLE_ROW_COUNT, Main.TABLE_COLUMN_COUNT);
+        JTable mainTable = new CustomJTable(Runner.TABLE_ROW_COUNT, Runner.TABLE_COLUMN_COUNT);
 
         mainTable.putClientProperty("terminateEditOnFocusLost", true);
 
