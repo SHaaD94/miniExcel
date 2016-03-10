@@ -7,8 +7,10 @@ public class Runner {
     public static void main(String[] args) {
         if (args.length != 0) {
             FileHandler fileHandler = new FileHandler();
-            fileHandler.parseFile(args[0]);
-            fileHandler.printComputedTable();
+            boolean parseResult = fileHandler.parseFile(args[0]);
+            if (parseResult) {
+                fileHandler.printComputedTable();
+            }
         } else {
             new MainForm();
         }

@@ -13,17 +13,4 @@ public class Util {
     public static int getAlphabetLength() {
         return alphabet.length();
     }
-
-    public static int getLargestCellLength(String[][] stringTable) {
-        int maxSize = 0;
-
-        for (String[] strings : stringTable) {
-            for (String string : strings) {
-                if (maxSize < string.length()) {
-                    maxSize = string.length();
-                }
-            }
-        }
-        return maxSize;
-    }
 }

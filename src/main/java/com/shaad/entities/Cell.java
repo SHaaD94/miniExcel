@@ -34,6 +34,9 @@ public class Cell {
                 this.content = "0";
                 this.value = "0";
             }
+        } else if (content.charAt(0) == '#') {
+            this.content = content;
+            this.value = this.content;
         } else {
             this.content = content;
             this.value = compute();

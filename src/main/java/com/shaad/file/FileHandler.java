@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Used to work with files.
+ */
 public class FileHandler {
     private TableHolder tableHolder = TableHolder.getInstance();
     private Logger log = Logger.getLogger(FileHandler.class.getName());
@@ -29,35 +32,35 @@ public class FileHandler {
         return line.split(" ");
     }
 
-    public void parseFile(String filePath) {
+    public boolean parseFile(String filePath) {
         try {
             List<String> lineList = Files.readAllLines(Paths.get(filePath));
             if (lineList.isEmpty()) {
                 System.out.println("File is empty");
-                return;
+                return false;
             }
             String[] tableSize = parseLine(lineList.get(0));
             lineList.remove(0);
             if (tableSize.length < 2) {
                 System.out.println("Wrong table size parameters");
-                return;
+                return false;
             }
             try {
                 rowCount = Integer.parseInt(tableSize[0]);
                 columnCount = Integer.parseInt(tableSize[1]);
             } catch (NumberFormatException e) {
                 System.out.println("Wrong table size parameters");
-                return;
+                return false;
             }
 
             if (rowCount <= 0 || columnCount <= 0) {
                 System.out.println("Wrong table size parameters");
-                return;
+                return false;
             }
 
             if (columnCount > Util.getAlphabetLength()) {
                 System.out.println("Too big column count");
-                return;
+                return false;
             }
 
             tableHolder.setTableRowCount(rowCount);
@@ -76,29 +79,41 @@ public class FileHandler {
             }
         } catch (NoSuchFileException e) {
             System.out.println("No such file");
+            return false;
         } catch (IOException e) {
             log.log(Level.SEVERE, "Error parsing file", e);
+            return false;
         }
+        return true;
     }
 
     public void printComputedTable() {
-        //compute
         String[][] computedTable = new String[rowCount][columnCount];
+        int[] maxLengthInColumn = new int[columnCount];
+        //compute
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
                 computedTable[i][j] = new Cell(tableHolder.getBackendTable()[i][j]).getValue();
             }
         }
+        //get max length in column
+        for (int i = 0; i < columnCount; i++) {
+            maxLengthInColumn[i] = 0;
+            for (int j = 0; j < rowCount; j++) {
+                if (computedTable[j][i].length() > maxLengthInColumn[i]) {
+                    maxLengthInColumn[i] = computedTable[j][i].length();
+                }
+            }
+        }
 
-        int maxCellLength = Util.getLargestCellLength(computedTable);
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
                 String outputCell = computedTable[i][j];
                 //format
-                while (outputCell.length() < maxCellLength) {
+                while (outputCell.length() < maxLengthInColumn[j]) {
                     outputCell += " ";
                 }
-                System.out.print(outputCell + " ");
+                System.out.print(outputCell + "  ");
             }
             System.out.println();
         }
