@@ -41,7 +41,7 @@ public class FileHandler {
             }
             String[] tableSize = parseLine(lineList.get(0));
             lineList.remove(0);
-            if (tableSize.length < 2) {
+            if (tableSize.length != 2) {
                 System.out.println("Wrong table size parameters");
                 return false;
             }
