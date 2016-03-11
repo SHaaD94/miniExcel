@@ -69,7 +69,7 @@ public class FileHandler {
 
             int currentRow = 0;
             for (String str : lineList) {
-                if (currentRow > rowCount) {
+                if (currentRow >= rowCount) {
                     break;
                 }
                 String[] cells = parseLine(str);
