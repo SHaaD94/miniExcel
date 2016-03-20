@@ -54,6 +54,7 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
 
     private void processEditingStopped() {
         newValue = table.getModel().getValueAt(row, column);
+        tableHolder.initTableMap();
 
         if (null != newValue && !newValue.equals(oldValue)) {
             tableHolder.getBackendTable()[row][column] = (String) newValue;
@@ -65,6 +66,7 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
         for (int i = 0; i < tableHolder.getTableRowCount(); i++) {
             for (int j = 0; j < tableHolder.getTableColumnCount(); j++) {
                 Cell cell = new Cell(tableHolder.getBackendTable()[i][j]);
+                TableHolder.getInstance().getBackendTableMap().put(i + "." + j, cell);
                 if (null != cell.getContent() && !cell.getContent().equals(" ")) {
                     String cellValue = cell.getValue();
                     table.setValueAt(cellValue, i, j);

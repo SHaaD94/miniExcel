@@ -1,5 +1,8 @@
 package com.shaad.entities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class which holds main table.
  */
@@ -20,9 +23,18 @@ public class TableHolder {
     private int tableColumnCount = 26;
     private int tableRowCount = 25;
     private String[][] backendTable;
+    /**
+     * Used to check is element (Row.Column) already computed.
+     */
+    private Map<String, Cell> backendTableMap;
+
+    public void initTableMap() {
+        backendTableMap = new HashMap<>();
+    }
 
     public void initializeTable() {
         backendTable = new String[tableRowCount][tableColumnCount];
+        initTableMap();
     }
 
     public int getTableColumnCount() {
@@ -51,5 +63,9 @@ public class TableHolder {
      */
     public String[][] getBackendTable() {
         return backendTable;
+    }
+
+    public Map<String, Cell> getBackendTableMap() {
+        return backendTableMap;
     }
 }

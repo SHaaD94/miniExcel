@@ -93,7 +93,9 @@ public class FileHandler {
         //compute
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                computedTable[i][j] = new Cell(tableHolder.getBackendTable()[i][j]).getValue();
+                Cell currentCell = new Cell(tableHolder.getBackendTable()[i][j]);
+                TableHolder.getInstance().getBackendTableMap().put(i + "." + j, currentCell);
+                computedTable[i][j] = currentCell.getValue();
             }
         }
         //get max length in column

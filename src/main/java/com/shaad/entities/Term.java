@@ -28,7 +28,6 @@ public class Term {
     public Term(String termContent) {
         content = termContent;
 
-        //todo: get rid of 'string types' of content
         if (content.matches("[a-zA-Z][1-9][0-9]*")) {
             executionType = TermExecutionType.REFERENCE;
         } else if (content.matches("[-]?[1-9][0-9]*|[0]")) {
@@ -38,7 +37,6 @@ public class Term {
             return;
         }
 
-        //value = !executionType.equals("#SyntaxError") ? compute() : executionType;
         value = compute();
     }
 
@@ -53,7 +51,13 @@ public class Term {
             int columnNumber = Util.getLetterPosition(content.charAt(0));
             Cell referencedCell;
             try {
-                referencedCell = new Cell(TableHolder.getInstance().getBackendTable()[rowNumber][columnNumber], true);
+                String cellID = rowNumber + "." + columnNumber;
+                if (null == TableHolder.getInstance().getBackendTableMap().get(cellID)) {
+                    referencedCell = new Cell(TableHolder.getInstance().getBackendTable()[rowNumber][columnNumber], true);
+                    TableHolder.getInstance().getBackendTableMap().put(cellID, referencedCell);
+                } else {
+                    referencedCell = TableHolder.getInstance().getBackendTableMap().get(cellID);
+                }
             } catch (StackOverflowError e) {
                 return "#RecursiveReference";
             } catch (ArrayIndexOutOfBoundsException e) {
